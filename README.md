@@ -13,5 +13,7 @@ The arguments in: lstm_out = LSTM(units = 4, activation = 'sigmoid', input_shape
 The arguments in: auxiliary_input = Input(shape=(9,), name='aux_input'))
 The way I am compiling and fitting the model
 
+the whole pseudocode is in pseudocode.py
+
 
 Would really appreciate some feedback promptly.
