@@ -21,16 +21,19 @@ y_train = training_set[1:1258]
 ##### None: means that model can expect any time step, 2: beacause 2 feature2
 ## the settings are what was using on the Sequential API but this sample is based on
 ## the Functional API so not sure if arguments are correct 
-lstm_out = LSTM(units = 4, activation = 'sigmoid', input_shape = (None, 2))
+
+main_input = Input(shape=(2,), dtype=‘float32', name='main_input')
+
+lstm_out = LSTM(units = 2, activation = 'sigmoid', input_shape = (None, 2)) # units = dimentionality in output state
 #Here we insert the auxiliary loss, allowing the LSTM and Embedding layer to be 
 #trained smoothly even though the main loss will be much higher in the model.
-auxiliary_output = Dense(1, activation='sigmoid', name='aux_output')(lstm_out)
+#auxiliary_output = Dense(1, activation='sigmoid', name='aux_output')(lstm_out)# not needed
 
 
 # other input (day_or_week, holiday)
-## not sure if this is correct but since I am having lets 9 features 
+## not sure if this is correct but since I am having lets 8 features 
 ## (7 days per week + 2 (holiday boolean)),I using the above
-auxiliary_input = Input(shape=(9,), name='aux_input')
+auxiliary_input = Input(shape=(8,), name='aux_input')
 
 ## concatenate the 2 inputs
 x = keras.layers.concatenate([lstm_out, auxiliary_input])
@@ -42,7 +45,7 @@ x = Dense(64, activation='relu')(x)
 x = Dense(64, activation='relu')(x)
 x = Dense(64, activation='relu')(x)
 
-model = Model(inputs=[main_input, auxiliary_input], outputs=[main_output, auxiliary_output])
+model = Model(inputs=[main_input, auxiliary_input], outputs=[main_output])
 
 ## change in the loss function from "binary_crossentropy" to "mean_squared_error" 
 ## not sure what is going on with the loss_weights settings and if this approach stands
